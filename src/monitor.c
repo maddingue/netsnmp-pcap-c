@@ -1,7 +1,7 @@
 /*
- * monitor.c
- * ---------
- * This file is heavily based on bsnmp-pcap.c, and as such 
+ * netsnmp-pcap :: monitor.c
+ * -------------------------
+ * This file is heavily based on bsnmp-pcap.c
  *
  * Copyright (c) 2008, Stefan Walter <stef@memberwebs.com>
  * Copyright (c) 2012, Sebastien Aperghis-Tramoni <sebastien@aperghis.net>
@@ -34,7 +34,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
  * THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
  * DAMAGE.
- */ 
+ */
 
 #include <assert.h>
 #include <errno.h>
