@@ -329,6 +329,8 @@ monitor_parse_config(const char *path, struct event_base *ev_base) {
     }
 
     for (i=0; i<MAX_DEFINITIONS; i++) {
+        struct monitor * m;
+
         if (defs[i] == NULL)
             continue;
 
@@ -342,10 +344,11 @@ monitor_parse_config(const char *path, struct event_base *ev_base) {
                 defs[i]->description, defs[i]->filter);
 
         /* create the monitor from the given definition */
-        monitor_new(defs[i], ev_base);
+        m = monitor_new(defs[i], ev_base);
 
         if (options.debug)
-            fprintf(stderr,);
+            fprintf(stderr, "monitor_parse_config: monitor was "
+                "%s created\n", ((m != NULL) ? "successfully" : "not"));
 
         /* deallocate the monitor definition */
         free(defs[i]);
