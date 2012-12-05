@@ -292,6 +292,11 @@ monitor_parse_config(const char *path, struct event_base *ev_base) {
             continue;
         }
         index = atoi(token);
+        if (index <= 0) {
+            syslog(_LOGERR_"parse error on line %d: index must be "
+                "a positive integer", i);
+            continue;
+        }
 
         /* extract the value */
         if ((token = strtok(NULL, "\"")) == NULL) {
