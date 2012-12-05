@@ -77,7 +77,10 @@ monitor_packet(u_char *arg, const struct pcap_pkthdr *header,
     if (header->len < ETHERNET_HEADER_LENGTH)
         return;
 
-fprintf(stderr, "- monitor_packet: packet matching filter <%s>\n", mon->filter);
+    if (options.debug >= 5)
+        fprintf(stderr, "monitor_packet: received packet on %s matching "
+            "filter <%s>\n", mon->device, mon->filter);
+
     mon->seen_octets  += header->len - ETHERNET_HEADER_LENGTH;
     mon->seen_packets += 1;
 }
