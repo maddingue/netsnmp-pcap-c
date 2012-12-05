@@ -264,6 +264,9 @@ monitor_parse_config(const char *path, struct event_base *ev_base) {
     uint32_t    index;
     int         i = 0;
 
+    if (options.debug)
+        fprintf(stderr, "monitor_parse_config: path=%s\n", path);
+
     if ((fh = fopen(path, "r")) == NULL) {
         syslog(_LOGERR_"can't read file '%s': %s", path, strerror(errno));
         return;
@@ -324,8 +327,20 @@ monitor_parse_config(const char *path, struct event_base *ev_base) {
         if (defs[i] == NULL)
             continue;
 
+        if (options.debug)
+            fprintf(stderr,
+                "monitor_parse_config: parsed the following definition:\n"
+                " - index=%d, device=<%s>\n"
+                " - description: <%s>\n"
+                " - filter: <%s>\n\n",
+                defs[i]->index, defs[i]->device,
+                defs[i]->description, defs[i]->filter);
+
         /* create the monitor from the given definition */
         monitor_new(defs[i], ev_base);
+
+        if (options.debug)
+            fprintf(stderr,);
 
         /* deallocate the monitor definition */
         free(defs[i]);
