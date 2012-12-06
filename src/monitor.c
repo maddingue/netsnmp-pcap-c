@@ -239,13 +239,13 @@ monitor_new(struct monitor_definition *mondef, struct event_base *ev_base) {
     mon->watcher = event_new(ev_base, fd, EV_READ|EV_PERSIST,
         monitor_io, (void *)mon);
     if (mon->watcher == NULL) {
-        syslog(_LOGERR_"couldn't create a new watcher");
+        syslog(_LOGERR_"couldn't create a watcher for a pcap handle");
         monitor_free(mon);
         return(NULL);
     }
 
     if (event_add(mon->watcher, NULL) < 0) {
-        syslog(_LOGERR_"couldn't activate watcher");
+        syslog(_LOGERR_"couldn't activate a watcher for a pcap handle");
         monitor_free(mon);
         return(NULL);
     }
