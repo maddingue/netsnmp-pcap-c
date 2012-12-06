@@ -33,7 +33,7 @@
  * DAMAGE.
  */
 
-#include <libev/ev.h>
+#include <event2/event.h>
 
 #include "netsnmp-pcap.h"
 #include "bsnmp-snmpmod-listmgmt.h"

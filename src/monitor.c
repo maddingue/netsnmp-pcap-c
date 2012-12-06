@@ -38,7 +38,7 @@
 
 #include <assert.h>
 #include <errno.h>
-#include <libev/ev.h>
+#include <event2/event.h>
 #include <pcap.h>
 #include <stdio.h>
 #include <stdlib.h>
