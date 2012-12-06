@@ -223,7 +223,7 @@ main(int argc, char **argv) {
     }
 
     /* configure syslog */
-    openlog(PROGRAM, LOG_NDELAY|LOG_PID|LOG_PERROR, LOG_DAEMON);
+    openlog(PROGRAM, SYSLOG_OPTIONS, SYSLOG_FACILITY);
     syslog(LOG_INFO, PROGRAM " v" VERSION " starting");
 
     /* run the main program */

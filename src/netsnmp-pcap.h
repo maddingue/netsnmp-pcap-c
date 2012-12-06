@@ -48,6 +48,10 @@
 #define PROGRAM "netsnmp-pcap"
 #define VERSION "0.01"
 
+#define SYSLOG_OPTIONS      LOG_NDELAY|LOG_PID|LOG_PERROR
+#define SYSLOG_FACILITY     LOG_DAEMON
+#define AGENT_NAME          "pcap"
+
 #define DEFAULT_BASE_OID    ".1.3.6.1.4.1.12325.1.1112"
 #define DEFAULT_CONFIG_PATH "/etc/snmp/pcap.conf"
 
@@ -101,6 +105,9 @@ TAILQ_HEAD(monitor_list, monitor);
 /* prototypes */
 void monitor_parse_config(const char *path, struct event_base *ev_base);
 void netsnmp_pcap_run(void);
+void nsp_agent_init(void);
+void nsp_agent_start(struct event_base *ev_base);
+void nsp_agent_stop(void);
 
 
 #endif
