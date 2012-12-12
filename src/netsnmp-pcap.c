@@ -67,6 +67,10 @@ netsnmp_pcap_run(void) {
     /* initialize the stats exporter */
     nsp_exporter_start(ev_base);
 
+    /* initialize and start the AgentX handlers */
+    nsp_agent_init();
+    nsp_agent_start(ev_base);
+
     /* start libevent dispatch loop */
     event_base_dispatch(ev_base);
 }
