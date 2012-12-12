@@ -91,6 +91,8 @@ usage(void) {
         "\n"
         "    -d, --debug [level]\n"
         "        Enable debug mode.\n"
+        "          1: initialization functions, 2: NetSNMP functions,"
+        "          3: AgentX callbacks, 5: report every received packet\n"
         "\n"
         "    -D, --detach\n"
         "        Tell the program to detach itself from the terminal and\n"
