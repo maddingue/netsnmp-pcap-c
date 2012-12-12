@@ -65,7 +65,9 @@ struct options {
     char    *config;
     int     debug;
     int     detach;
+    char    *dump_file;
     int     help;
+    int     interval;
     char    *pidfile;
     char    *socket;
     int     version;

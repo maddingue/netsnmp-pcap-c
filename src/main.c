@@ -50,7 +50,9 @@ struct options options = {
     /* config   = */ NULL,
     /* debug    = */ 0,
     /* detach   = */ 1,
+    /* dump_file= */ NULL,
     /* help     = */ 0,
+    /* interval = */ 30,
     /* pidfile  = */ NULL,
     /* socket   = */ NULL,
     /* version  = */ 0,
@@ -98,6 +100,13 @@ usage(void) {
         "        Tell the program to detach itself from the terminal and\n"
         "        become a daemon. Use --nodetach to prevent this.\n"
         "\n"
+        "    -f, --dump-file path\n"
+        "        Specify a path to write the stats to, in JSON format.\n"
+        "\n"
+        "    -i, --interval delay\n"
+        "        Specify the interval, in seconds, between exporting the\n"
+        "        stats to the AgentX part or writng them on disk. Default: 30\n"
+        "\n"
         "    -p, --pidfile path\n"
         "        Specify the path to a file to write the PID of the daemon.\n"
         "\n"
@@ -125,7 +134,7 @@ main(int argc, char **argv) {
     int optind = 0;
 
     /* options definition */
-    const char short_options[] = "B:c:d::Dhp:Vx:";
+    const char short_options[] = "B:c:d::Df:hi:p:Vx:";
     static struct option long_options[] = {
         { "help",       no_argument,        &options.help, 1 },
         { "usage",      no_argument,        &options.help, 1 },
@@ -137,6 +146,8 @@ main(int argc, char **argv) {
         { "nodaemon",   no_argument,        &options.detach, 0 },
         { "base-oid",   required_argument,  NULL, 'B' },
         { "config",     required_argument,  NULL, 'c' },
+        { "dump-file",  required_argument,  NULL, 'f' },
+        { "interval",   required_argument,  NULL, 'i' },
         { "pidfile",    required_argument,  NULL, 'p' },
         { "socket",     required_argument,  NULL, 'x' },
         { NULL,         0,                  NULL, 0 }
@@ -168,8 +179,17 @@ main(int argc, char **argv) {
                 options.detach = 1;
                 break;
 
+            case 'f': /* --dump-file */
+                options.dump_file = strdup(optarg);
+                break;
+
             case 'h': /* --help */
                 options.help = 1;
+                break;
+
+            case 'i': /* --interval */
+                if (optarg != NULL)
+                    options.interval = atoi(optarg);
                 break;
 
             case 'p': /* --pidfile */
