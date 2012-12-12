@@ -101,6 +101,7 @@ struct monitor {
 };
 
 TAILQ_HEAD(monitor_list, monitor);
+extern struct monitor_list monitors;
 
 /* prototypes */
 void monitor_parse_config(const char *path, struct event_base *ev_base);
