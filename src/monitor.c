@@ -153,8 +153,8 @@ monitor_free(struct monitor *mon) {
  */
 static struct monitor *
 monitor_new(struct monitor_definition *mondef, struct event_base *ev_base) {
+    struct monitor  *mon;
     char    errbuf[PCAP_ERRBUF_SIZE];
-    struct  monitor *mon;
     int     fd;
 
     /* allocate memory for the monitor */
