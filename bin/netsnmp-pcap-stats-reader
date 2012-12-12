@@ -1,0 +1,105 @@
+#!/usr/bin/env perl
+use strict;
+use JSON::XS;
+use SNMP::Extension::PassPersist;
+use Sys::Syslog;
+
+use constant BASE_OID => ".1.3.6.1.4.1.12325.1.1112";
+
+my %oid = (
+    pcapCount   => BASE_OID.".1",
+    pcapIndex   => BASE_OID.".2.1.0",
+    pcapDescr   => BASE_OID.".2.1.1",
+    pcapDevice  => BASE_OID.".2.1.2",
+    pcapFilter  => BASE_OID.".2.1.3",
+    pcapOctets  => BASE_OID.".2.1.4",
+    pcapPackets => BASE_OID.".2.1.5",
+);
+
+my %type = (
+    pcapCount   => "integer",
+    pcapIndex   => "integer",
+    pcapDescr   => "string",
+    pcapDevice  => "string",
+    pcapFilter  => "string",
+    pcapOctets  => "counter",
+    pcapPackets => "counter",
+);
+
+
+# create the sub-agent
+my $agent = SNMP::Extension::PassPersist->new(
+    backend_collect => \&update_tree,
+    refresh         => 20,
+);
+
+openlog("netsnmp-pcap-stats-reader", "ndelay,nofatal,pid,perror", "daemon");
+$agent->run;
+
+
+sub update_tree {
+    my ($self) = @_;
+    my ($path) = @ARGV;
+
+    # read the JSON file
+    open my $fh, "<", $path
+        or error("can't read file '$path': $!");
+    my $stats = eval { decode_json( do { local $/; <$fh> } ) }
+        or error("can't decode JSON data: $@");
+    ref $stats eq "ARRAY"
+        or error("invalid JSON data");
+
+    # put the data in the OID tree
+    $self->add_oid_entry($oid{pcapCount}, $type{pcapCount}, scalar @$stats);
+
+    for my $stat (@$stats) {
+        for my $field (keys %$stat) {
+            $self->add_oid_entry(
+                "$oid{$field}.$stat->{pcapIndex}",
+                $type{$field}, $stat->{$field},
+            );
+        }
+    }
+}
+
+
+sub error {
+    #die "error: ", @_, "\n"
+    syslog(err => "error: %s", join "", @_);
+    exit -1;
+}
+
+
+__END__
+
+=head1 NAME
+
+netsnmp-pcap-stats-reader - pass/pass_persist Net-SNMP extension for reading
+netsnmp-pcap statistics
+
+=head1 SYNOPSIS
+
+in F</etc/snmp/snmpd.conf>:
+
+    pass_persist .1.3.6.1.4.1.12325.1.1112  netsnmp-pcap-stats-reader /path/to/stats.json
+
+=head1 DESCRIPTION
+
+This small program is a workaround while C<netsnmp-pcap> lacks a proper
+AgentX sub-agent: it's a very simple pass/pass_persist Net-SNMP extension
+reads the JSON statistics file and exposes the data in the OID tree.
+
+You simply need to install the JSON::XS and SNMP::Extension::PassPersist
+modules to run this program.
+
+
+=head1 AUTHOR
+
+SE<eacute>bastien Aperghis-Tramoni C<< <sebastien at aperghis.net> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2012 SE<eacute>bastien Aperghis-Tramoni, all rights reserved.
+
+This program is 
+
