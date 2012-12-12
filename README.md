@@ -11,6 +11,19 @@ you to measure arbitrary network traffic, in packets or octets, using the
 pcap(3) library. Multiple flows of traffic can be measured by setting as many
 network monitors, with different filters.
 
+INSTALL
+=======
+To install this software, you need:
+* a C compiler
+* libevent2 (http://libevent.org/)
+* libpcap (http://www.tcpdump.org/)
+* Net-SNMP (http://www.net-snmp.org/)
+
+Because the SNMP/AgentX component does not currently works, a program
+(bin/netsnmp-pcap-stats-reader) is provided to allow an easy integration
+of the results within Net-SNMP. This program needs Perl 5.8 or later
+with the additional modules: JSON::XS, SNMP::Extension::PassPersist
+
 LICENSE
 =======
 Redistribution and use in source and binary forms, with or without 
